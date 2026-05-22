@@ -15,7 +15,7 @@ export class AuthService {
   private readonly currentRoleSignal = signal<string>('Administrador');
   public readonly currentRole = this.currentRoleSignal.asReadonly();
 
-  public readonly roles = ['Administrador', 'Psicólogo', 'Recepcionista', 'Defensor Legal', 'Víctima', 'Soporte Técnico'];
+  public readonly roles = ['Administrador', 'Psicólogo', 'Recepcionista', 'Defensor Legal'];
 
   constructor() {
     const storedAuth = localStorage.getItem('safezone_auth');
@@ -32,21 +32,19 @@ export class AuthService {
     this.isLoggedInSignal.set(true);
     localStorage.setItem('safezone_auth', 'true');
     
-    // Auto-detect and switch role based on username keywords for dynamic UX simulation
     if (username) {
       const lower = username.toLowerCase();
       if (lower.includes('admin')) {
         this.changeRole('Administrador');
-      } else if (lower.includes('psic') || lower.includes('cabrera') || lower.includes('rojas')) {
+      } else if (lower.includes('psic')) {
         this.changeRole('Psicólogo');
-      } else if (lower.includes('recep') || lower.includes('lima')) {
+      } else if (lower.includes('recep')) {
         this.changeRole('Recepcionista');
-      } else if (lower.includes('defens') || lower.includes('legal') || lower.includes('abog')) {
+      } else if (lower.includes('defens') || lower.includes('legal')) {
         this.changeRole('Defensor Legal');
-      } else if (lower.includes('vict') || lower.includes('maria')) {
-        this.changeRole('Víctima');
-      } else if (lower.includes('soport') || lower.includes('tec')) {
-        this.changeRole('Soporte Técnico');
+      } else {
+        // Por defecto si no coincide ninguno
+        this.changeRole('Recepcionista');
       }
     }
 
