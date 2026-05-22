@@ -12,7 +12,7 @@
 | RF | Implementado Visualmente | Faltante Visual | % Frontend |
 |----|--------------------------|-----------------|:----------:|
 | RF-01 — Autenticar usuario | Login funcional, guard, localStorage | Pantalla de recuperar contraseña, indicador de sesión activa | 🟢 75% |
-| RF-02 — Administrar roles | 6 roles definidos, cambio dinámico | CRUD visual de usuarios, sidebar filtrado por rol, restricción visual de rutas | 🔴 30% |
+| RF-02 — Administrar roles | 4 roles definidos, cambio dinámico | CRUD visual de usuarios, sidebar filtrado por rol, restricción visual de rutas | 🔴 30% |
 | RF-03 — Registrar víctimas | Campos en formulario de denuncia (Step 1) | Formulario dedicado, más campos, servicio propio | 🟡 40% |
 | RF-10 — Configuración de seguridad | Sliders de timeout/contraseña, 3 toggles | Más parámetros, guardar en localStorage, feedback visual | 🟡 50% |
 | RF-11 — Anonimato | Checkbox + alias visual en denuncia | Generación determinística, indicador visual claro en todo el sistema | 🟢 60% |
@@ -36,17 +36,17 @@ Que el menú lateral muestre **solo las opciones que corresponden al rol activo*
 - Envolver cada `<a>` del menú con `@if` condicional basado en el rol activo
 - Mapa de visibilidad por rol:
 
-| Módulo | Admin | Recepcionista | Psicólogo | Defensor Legal | Víctima | Soporte |
-|--------|:-----:|:-------------:|:---------:|:--------------:|:-------:|:-------:|
-| Dashboard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Registrar Denuncia | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ |
-| Control de Casos | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Fichas de Víctimas | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Agenda / Citas | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Evidencias Digitales | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Reportes | ✅ | ❌ | ✅ | ✅ | ❌ | ❌ |
-| Auditoría | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Configuración | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Módulo | Admin | Recepcionista | Psicólogo | Defensor Legal |
+|--------|:-----:|:-------------:|:---------:|:--------------:|
+| Dashboard | ✅ | ✅ | ✅ | ✅ |
+| Registrar Denuncia | ✅ | ✅ | ❌ | ❌ |
+| Control de Casos | ✅ | ✅ | ✅ | ✅ |
+| Fichas de Víctimas | ✅ | ✅ | ✅ | ✅ |
+| Agenda / Citas | ✅ | ✅ | ✅ | ✅ |
+| Evidencias Digitales | ✅ | ✅ | ✅ | ✅ |
+| Reportes | ✅ | ❌ | ✅ | ✅ |
+| Auditoría | ✅ | ❌ | ❌ | ❌ |
+| Configuración | ✅ | ❌ | ❌ | ❌ |
 
 #### [MODIFY] [sidebar.component.ts](file:///c:/Users/user/Documents/CICLO7/WEB%20INTEGRADO/ProyectoFinal/safezone-frontend/src/app/core/layout/sidebar/sidebar.component.ts)
 - Crear método `hasAccess(module: string): boolean` que consulte el rol actual y la tabla de permisos
@@ -75,7 +75,7 @@ Que el menú lateral muestre **solo las opciones que corresponden al rol activo*
 - **Tabla de usuarios** con datos mock: nombre, email, rol, estado (activo/inactivo), última conexión
 - **Botón "Nuevo Usuario"** → Modal con formulario: nombre, email, contraseña, rol (select), estado
 - **Acciones en tabla:** Editar (modal), Cambiar estado (toggle), Eliminar (confirmación)
-- Solo visible para rol **Administrador** y **Soporte Técnico**
+- Solo visible para rol **Administrador**
 - Datos almacenados en un `UsersService` con signal y array mock
 
 #### [NEW] `src/app/core/services/users.service.ts`
@@ -84,10 +84,10 @@ Que el menú lateral muestre **solo las opciones que corresponden al rol activo*
 - Persistir en `localStorage` key `safezone_users`
 
 #### [MODIFY] [app.routes.ts](file:///c:/Users/user/Documents/CICLO7/WEB%20INTEGRADO/ProyectoFinal/safezone-frontend/src/app/app.routes.ts)
-- Agregar ruta `usuarios` con `roles: ['Administrador', 'Soporte Técnico']`
+- Agregar ruta `usuarios` con `roles: ['Administrador']`
 
 #### [MODIFY] [sidebar.component.html](file:///c:/Users/user/Documents/CICLO7/WEB%20INTEGRADO/ProyectoFinal/safezone-frontend/src/app/core/layout/sidebar/sidebar.component.html)
-- Agregar link "Gestión de Usuarios" con ícono 👥, visible solo para Admin/Soporte
+- Agregar link "Gestión de Usuarios" con ícono 👥, visible solo para Admin
 
 ### RF-18: Dashboard Dinámico por Rol
 
@@ -101,8 +101,6 @@ Crear secciones condicionales con `@if` o `@switch` según `authService.currentR
 | **Recepcionista** | Denuncias hoy, Casos nuevos, Pendientes | Últimas denuncias registradas, Formulario rápido | Registrar Denuncia (botón destacado) |
 | **Psicólogo** | Mis pacientes, Citas hoy, Evaluaciones pendientes | Lista de citas del día, Mis casos asignados | Registrar Observación, Ver Agenda |
 | **Defensor Legal** | Mis casos, Medidas activas, Derivaciones | Casos asignados con estado judicial | Ver Expediente, Registrar Acta |
-| **Víctima** | Estado de mi caso, Próxima cita, Contacto de emergencia | Timeline simplificado de su caso | Solicitar Cita, Ver Estado |
-| **Soporte Técnico** | Usuarios activos, Sesiones, Logs recientes | Últimos logs de auditoría, Estado del sistema | Ir a Configuración, Ver Logs |
 
 #### [MODIFY] [dashboard.component.ts](file:///c:/Users/user/Documents/CICLO7/WEB%20INTEGRADO/ProyectoFinal/safezone-frontend/src/app/features/dashboard/dashboard.component.ts)
 - Inyectar `AppointmentsService` para mostrar citas del día según rol
@@ -238,8 +236,8 @@ Reemplazar el panel derecho estático con un **sistema de tabs**:
 ### RF-01: Mejoras Visuales de Login
 
 #### [MODIFY] [login.component.html](file:///c:/Users/user/Documents/CICLO7/WEB%20INTEGRADO/ProyectoFinal/safezone-frontend/src/app/features/auth/login/login.component.html)
-- Agregar **selector de rol de prueba** debajo del formulario (6 botones con íconos que pre-llenan el username según el rol)
-- Mejorar el indicador de credenciales de prueba mostrando los 6 roles disponibles
+- Agregar **credenciales de prueba** debajo del formulario
+- Mejorar el indicador mostrando los 4 roles disponibles
 
 #### [MODIFY] [login.component.ts](file:///c:/Users/user/Documents/CICLO7/WEB%20INTEGRADO/ProyectoFinal/safezone-frontend/src/app/features/auth/login/login.component.ts)
 - Método `selectTestRole(role: string)` que pre-llena username y password automáticamente
