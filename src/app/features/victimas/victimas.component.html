@@ -1,0 +1,104 @@
+<div class="animate-slide-up">
+  
+  <div class="sz-page-header">
+    <div class="sz-page-header-info">
+      <h1 class="sz-page-title">Historial Clínico y Social de Víctimas</h1>
+      <p class="sz-page-description">Expediente único con registro emocional, evolución del riesgo e historial.</p>
+    </div>
+  </div>
+
+  <!-- Listado de Fichas de Víctimas -->
+  <div class="sz-split-layout mt-6">
+    
+    <!-- Izquierda: Listado -->
+    <div class="flex flex-col gap-4">
+      <p class="text-xs font-bold text-secondary">Selecciona un expediente para consultar:</p>
+      
+      @for (c of casesService.casos(); track c.id) {
+        <div class="card card-interactive p-4" [ngClass]="{'border-brand-light bg-brand-soft': casesService.selectedCase()?.id === c.id}" (click)="casesService.viewCaseDetails(c)">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-bold text-sm">{{ c.victim }}</p>
+              <p class="text-xs text-muted mt-1">DNI/Alias Código: {{ c.anonimo ? 'Encriptado' : '45398242' }}</p>
+            </div>
+            <span class="badge" [ngClass]="{
+              'badge-risk-severe': c.riesgo === 'Severo',
+              'badge-risk-moderate': c.riesgo === 'Moderado',
+              'badge-risk-low': c.riesgo === 'Leve'
+            }">{{ c.riesgo }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Derecha: Ficha en detalle -->
+    <div class="flex flex-col gap-4">
+      @if (casesService.selectedCase()) {
+        <div class="sz-victima-profile-card">
+          <div class="profile-avatar">
+            {{ casesService.selectedCase()?.victim?.charAt(0) }}
+          </div>
+          <div class="profile-details">
+            <div class="name-row">
+              <h2 class="name">{{ casesService.selectedCase()?.victim }}</h2>
+              <span class="badge badge-brand">{{ casesService.selectedCase()?.codigo }}</span>
+            </div>
+            <div class="meta-row">
+              <span><strong>Edad:</strong> {{ casesService.selectedCase()?.edad }} años</span>
+              <span><strong>Distrito:</strong> {{ casesService.selectedCase()?.distrito }}</span>
+              <span><strong>Estado Clínico:</strong> {{ casesService.selectedCase()?.emocion }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Datos Clínicos y Timeline de evolución de riesgo -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-header-title">Evolución de Atención Psicosocial</h3>
+          </div>
+          <div class="card-body">
+            <div class="sz-timeline">
+              
+              <div class="sz-timeline-item">
+                <div class="sz-timeline-item-node is-active"></div>
+                <div class="sz-timeline-item-header">
+                  <span class="time-title">Evaluación de Crisis Inicial</span>
+                  <span class="time-stamp">Hace 1 día</span>
+                </div>
+                <p class="sz-timeline-item-body">
+                  Víctima manifiesta síntomas agudos de estrés postraumático y crisis de pánico tras agresión física directa. Se asigna acompañamiento inmediato.
+                </p>
+                <div class="sz-timeline-item-meta">
+                  <span>Evaluador: Dr. Carlos Rojas</span>
+                  <span>•</span>
+                  <span>Riesgo Evaluado: Severo</span>
+                </div>
+              </div>
+
+              <div class="sz-timeline-item">
+                <div class="sz-timeline-item-node is-success"></div>
+                <div class="sz-timeline-item-header">
+                  <span class="time-title">Emisión de Orden de Protección</span>
+                  <span class="time-stamp">Hace 3 días</span>
+                </div>
+                <p class="sz-timeline-item-body">
+                  El 2do Juzgado de Familia de Lima emite medidas de alejamiento contra el presunto agresor a una distancia mínima de 300 metros.
+                </p>
+                <div class="sz-timeline-item-meta">
+                  <span>Autoridad: Poder Judicial</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="card text-center p-8">
+          <p class="text-secondary font-medium">Seleccione una víctima del listado de la izquierda para abrir su expediente digital en este panel.</p>
+        </div>
+      }
+    </div>
+
+  </div>
+
+</div>

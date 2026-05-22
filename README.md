@@ -1,59 +1,95 @@
-# SafezoneFrontend
+# SafeZone - Plataforma de Denuncias y Seguimiento de Casos de Violencia Familiar
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.12.
+**SafeZone** es una plataforma web enterprise moderna diseñada para la gestión, seguimiento y protección de casos de violencia familiar en Lima Metropolitana. Este sistema está orientado a entidades gubernamentales (MIMP, comisarías, Poder Judicial), personal administrativo, psicólogos, defensores legales y víctimas, garantizando accesibilidad, confidencialidad, rapidez y sensibilidad humana.
 
-## Development server
+El frontend del proyecto está construido con **Angular 21 (Standalone Components)**, estructurado bajo un diseño modular limpio y escalable con estilos avanzados en **SCSS** (totalmente preparados para Dart Sass 3.0.0).
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+## 🎨 Inspiración y Estética Visual
+El diseño de SafeZone está enfocado en ofrecer una experiencia de usuario institucional pero moderna, combinando elementos inspirados en plataformas como **Linear**, **Vercel** y **Stripe Dashboard**:
+*   **Aesthetics Premium**: Uso de micro-animaciones en CSS, bordes suaves y gradients armónicos.
+*   **Glassmorphism**: Efectos de desenfoque translúcido (`backdrop-filter`) en barras superiores y menús de navegación.
+*   **Simulador de Carga (Skeletons)**: Indicadores de progreso animados que mejoran el feedback visual del usuario al transicionar entre vistas o al presionar "Simular Carga".
+
+---
+
+## 🛠️ Arquitectura y Estructura de Directorios
+El proyecto se ha reestructurado separando la lógica monolítica original en componentes independientes y lazy-loaded guiándose por patrones de diseño de gran escala:
+
+```
+src/app/
+├── app.config.ts          # Configuración del bootstrapping global de Angular
+├── app.routes.ts          # Configuración de enrutamiento SPA y Lazy Loading
+├── app.ts                 # Componente raíz del portal (RouterOutlet limpio)
+├── core/                  # Recursos transversales no compartidos
+│   ├── guards/            # Guardianes de ruta (auth.guard.ts)
+│   ├── layout/            # Contenedor estructural (main-layout, sidebar, topbar)
+│   └── services/          # Gestión de estado global con Angular Signals
+│       ├── auth.service.ts
+│       ├── cases.service.ts
+│       ├── appointments.service.ts
+│       ├── evidence.service.ts
+│       ├── toast.service.ts
+│       ├── loading.service.ts
+│       └── layout.service.ts
+├── shared/                # Recursos y componentes reutilizables
+│   └── components/        # Contenedores globales de Toasts y Loader superior
+└── features/              # Módulos y páginas funcionales (Lazy-Loaded)
+    ├── auth/login/        # Página de autenticación con simulación
+    ├── dashboard/         # Métricas, KPIs y alertas de monitoreo
+    ├── denuncias/         # Formulario de denuncias multi-step
+    ├── casos/             # Bandeja de expedientes con flujo Kanban
+    ├── victimas/          # Historial clínico y timeline de evolución
+    ├── citas/             # Calendario de citas psicosociales/legales
+    ├── evidencias/        # Bóveda digital de archivos con previsualizador
+    ├── reportes/          # Visualización de analíticas y gráficos SVG
+    ├── auditoria/         # Logs de acciones de usuario y seguridad
+    └── configuracion/     # Ajustes y simulación de reglas del sistema
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 🔐 Simulador de Autenticación y Roles
+Para facilitar la evaluación visual del portal sin requerir bases de datos o APIs activas, el componente de inicio de sesión incorpora un **detector automático de roles por palabra clave**:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Al ingresar credenciales en el [login](file:///c:/Users/user/Documents/CICLO7/WEB%20INTEGRADO/ProyectoFinal/safezone-frontend/src/app/features/auth/login/login.component.ts), el sistema detecta el usuario y configura el panel y navegación correspondientes:
 
+| Usuario de Prueba / Palabra Clave | Rol Activado |
+| :--- | :--- |
+| `admin` / `admin_safezone` | **Administrador** |
+| `psic` / `cabrera` / `rojas` | **Psicólogo** |
+| `recep` / `lima` | **Recepcionista** (Default) |
+| `defens` / `legal` / `abog` | **Defensor Legal** |
+| `vict` / `maria` | **Víctima** |
+| `soport` / `tec` | **Soporte Técnico** |
+
+*Nota: Una vez dentro del panel, se puede alternar el rol de manera dinámica en tiempo real utilizando el selector de la barra superior.*
+
+---
+
+## 🚀 Comandos de Desarrollo
+
+### Instalar Dependencias
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+### Servidor de Desarrollo
+Para levantar el servidor local en `http://localhost:4200/`:
 ```bash
-ng generate --help
+npm start
+# o alternativamente: npx ng serve
 ```
 
-## Building
-
-To build the project run:
-
+### Compilar para Producción
+Para validar y compilar el proyecto optimizado en la carpeta `dist/`:
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
+### Pruebas Unitarias
+Para correr la suite de pruebas unitarias configuradas con **Vitest**:
 ```bash
-ng test
+npm run test
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

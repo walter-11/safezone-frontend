@@ -1,0 +1,46 @@
+<div class="animate-slide-up">
+  
+  <div class="sz-page-header">
+    <div class="sz-page-header-info">
+      <h1 class="sz-page-title">Logs y Trazabilidad de Auditoría</h1>
+      <p class="sz-page-description">Historial inmutable de acciones realizadas por el personal institucional.</p>
+    </div>
+  </div>
+
+  <!-- Logs Table -->
+  <div class="sz-table-container mt-6">
+    <table class="sz-table">
+      <thead>
+        <tr>
+          <th>Fecha / Hora</th>
+          <th>Usuario</th>
+          <th>Rol</th>
+          <th>Acción Realizada</th>
+          <th>Dirección IP</th>
+          <th>Detalles de la Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (log of auditLogs; track log.timestamp) {
+          <tr>
+            <td class="font-semibold text-secondary">{{ log.timestamp }}</td>
+            <td><strong>{{ log.user }}</strong></td>
+            <td>
+              <span class="badge badge-brand">{{ log.role }}</span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'badge-success': log.action.includes('Creación') || log.action.includes('Registro'),
+                'badge-info': log.action.includes('Asignación'),
+                'badge-warning': log.action.includes('Modificación') || log.action.includes('Carga')
+              }">{{ log.action }}</span>
+            </td>
+            <td class="text-xs text-muted">{{ log.ip }}</td>
+            <td>{{ log.detail }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>

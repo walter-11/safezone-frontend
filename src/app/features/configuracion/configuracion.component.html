@@ -1,0 +1,81 @@
+<div class="animate-slide-up max-width-800" style="margin: 0 auto; width: 100%;">
+  
+  <div class="sz-page-header">
+    <div class="sz-page-header-info">
+      <h1 class="sz-page-title">Configuración del Sistema</h1>
+      <p class="sz-page-description">Gestión de tiempos de sesión, reglas de seguridad y permisos de roles.</p>
+    </div>
+  </div>
+
+  <div class="card mt-6">
+    <div class="card-body">
+      
+      <!-- Reglas de Seguridad -->
+      <div class="sz-settings-section">
+        <div class="sz-settings-section-header">
+          <h4 class="title">Parámetros de Seguridad de Cuenta</h4>
+          <p class="desc">Defina las políticas de encriptación y tiempos de inactividad de sesión.</p>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Tiempo de Expiración de Sesión (Minutos): {{ configRules.sessionTimeout }}</label>
+          <input type="range" min="5" max="60" step="5" class="w-full" [(ngModel)]="configRules.sessionTimeout">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Longitud mínima de contraseña: {{ configRules.minPasswordLength }}</label>
+          <input type="range" min="8" max="20" step="1" class="w-full" [(ngModel)]="configRules.minPasswordLength">
+        </div>
+      </div>
+
+      <!-- Permisos por Roles (Simulador) -->
+      <div class="sz-settings-section">
+        <div class="sz-settings-section-header">
+          <h4 class="title">Matriz de Permisos del Personal</h4>
+          <p class="desc">Ajuste qué herramientas puede acceder el rol seleccionado en la cabecera.</p>
+        </div>
+
+        <div class="sz-permissions-list">
+          
+          <div class="permission-item">
+            <div class="info">
+              <p class="name">Ver datos personales de víctimas</p>
+              <p class="desc">Acceso al DNI y nombre real (restringido en modo Anónimo).</p>
+            </div>
+            <label class="form-switch">
+              <input type="checkbox" class="form-switch-input" checked>
+            </label>
+          </div>
+
+          <div class="permission-item">
+            <div class="info">
+              <p class="name">Derivación de denuncias a la Fiscalía</p>
+              <p class="desc">Permite enviar actas digitalizadas de forma inmediata.</p>
+            </div>
+            <label class="form-switch">
+              <input type="checkbox" class="form-switch-input" checked>
+            </label>
+          </div>
+
+          <div class="permission-item">
+            <div class="info">
+              <p class="name">Eliminación de evidencias digitales</p>
+              <p class="desc">Requiere aprobación del administrador del sistema.</p>
+            </div>
+            <label class="form-switch">
+              <input type="checkbox" class="form-switch-input">
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Guardado -->
+      <div class="flex justify-end mt-4">
+        <button class="btn btn-primary" (click)="showToast('Cambios de configuración guardados correctamente.', 'success')">Guardar Reglas</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
